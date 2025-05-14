@@ -11,4 +11,23 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\AutoMapper\" />
+    <Folder Include="Application\Interfaces\" />
+    <Folder Include="Application\Models\Response\" />
+    <Folder Include="Application\Models\Request\" />
+    <Folder Include="Application\Services\" />
+    <Folder Include="Domain\Dtos\" />
+    <Folder Include="Domain\Entities\" />
+    <Folder Include="Domain\Interfaces\" />
+    <Folder Include="Domain\Services\" />
+    <Folder Include="Infra\Context\" />
+    <Folder Include="Infra\Mappings\" />
+    <Folder Include="Infra\Repository\" />
+    <Folder Include="IoC\" />
+    <Folder Include="Presentation\Configuration\" />
+    <Folder Include="Presentation\Endpoints\" />
+    <Folder Include="Presentation\Validations\" />
+  </ItemGroup>
+
 </Project>
