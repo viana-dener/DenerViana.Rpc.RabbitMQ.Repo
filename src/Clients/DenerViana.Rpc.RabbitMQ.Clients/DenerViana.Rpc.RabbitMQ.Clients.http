@@ -1,0 +1,6 @@
+@DenerViana.Rpc.RabbitMQ.Clients_HostAddress = http://localhost:5201
+
+GET {{DenerViana.Rpc.RabbitMQ.Clients_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
