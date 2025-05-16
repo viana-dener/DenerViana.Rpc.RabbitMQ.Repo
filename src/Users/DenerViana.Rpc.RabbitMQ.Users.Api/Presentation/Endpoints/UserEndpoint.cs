@@ -3,15 +3,15 @@ using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Filters;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Models.Response;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
-using DenerViana.Rpc.RabbitMQ.Users.Application.Interfaces;
-using DenerViana.Rpc.RabbitMQ.Users.Application.Models.Request;
-using DenerViana.Rpc.RabbitMQ.Users.Application.Models.Response;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Interfaces;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace DenerViana.Rpc.RabbitMQ.Users.Presentation.Endpoints;
+namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Endpoints;
 
-public static class AccountEndpoint
+public static class UserEndpoint
 {
     #region Public Methods
 
@@ -19,22 +19,22 @@ public static class AccountEndpoint
     /// Mapeia os endpoints relacionados ao produtor na aplicação, incluindo operações de listagem e cadastro de contas.
     /// Define as rotas, filtros, metadados do Swagger, cache de resposta e validação de cabeçalhos.
     /// </summary>
-    public static void MapAccountEndpoint(this WebApplication app)
+    public static void MapUserEndpoint(this WebApplication app)
     {
-        app.MapGet("Account", async (IMainEndpoints endpoint, IUserAppServices userApp) =>
+        app.MapGet("User", async (IMainEndpoints endpoint, IUserAppServices userApp) =>
         {
             var result = await userApp.GetAllAsync();
 
             return endpoint.CustomResponse(result);
 
-        }).WithName("GetAccounts")
+        }).WithName("GetUsers")
           .WithOpenApi()
           .Produces<IEnumerable<UserResponse>>(200)
           .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Get all  accounts")
+          .WithMetadata(new SwaggerOperationAttribute("Get all users")
           {
-              OperationId = "GetAccounts",
-              Tags = new[] { " Accounts" }
+              OperationId = "GetUsers",
+              Tags = new[] { " Users" }
           })
           .WithMetadata(new ResponseCacheAttribute
           {
@@ -42,7 +42,7 @@ public static class AccountEndpoint
               Location = ResponseCacheLocation.Any
           });
 
-        app.MapPost("Account", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, RegisterUserRequest account) =>
+        app.MapPost("User", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, RegisterUserRequest User) =>
         {
             var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
             var requiredHeaders = new Dictionary<string, bool>
@@ -57,19 +57,19 @@ public static class AccountEndpoint
 
             var userInfo = CreateUserInfo(headers);
 
-            var result = await userApp.RegisterUserAsync(account, userInfo);
+            var result = await userApp.RegisterUserAsync(User, userInfo);
 
             return endpoint.CustomResponse(result);
 
         }).AddEndpointFilter<ValidationFilter<RegisterUserRequest>>()
-          .WithName("PostAccount")
+          .WithName("PostUser")
           .WithOpenApi()
           .Produces<GenericResponse>(200)
           .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Register a new  account")
+          .WithMetadata(new SwaggerOperationAttribute("Register a new user")
           {
-              OperationId = "PostAccount",
-              Tags = new[] { " Accounts" }
+              OperationId = "PostUser",
+              Tags = new[] { " Users" }
           })
           .WithMetadata(new ResponseCacheAttribute
           {

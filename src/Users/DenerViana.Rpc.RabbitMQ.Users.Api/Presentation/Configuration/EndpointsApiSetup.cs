@@ -2,16 +2,16 @@
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
-using DenerViana.Rpc.RabbitMQ.Users.Application.Models.Request;
-using DenerViana.Rpc.RabbitMQ.Users.Infra.Context;
-using DenerViana.Rpc.RabbitMQ.Users.Presentation.Endpoints;
-using DenerViana.Rpc.RabbitMQ.Users.Presentation.Validations;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Context;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Endpoints;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Validations;
 using FluentValidation;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace DenerViana.Rpc.RabbitMQ.Users.Presentation.Configuration;
+namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Configuration;
 
 /// <summary>
 /// Classe responsavel por definir configurações de pipeline da API

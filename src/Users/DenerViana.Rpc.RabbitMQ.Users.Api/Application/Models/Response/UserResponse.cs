@@ -1,4 +1,4 @@
-﻿namespace DenerViana.Rpc.RabbitMQ.Users.Application.Models.Response;
+﻿namespace DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Response;
 
 public class UserResponse
 {
