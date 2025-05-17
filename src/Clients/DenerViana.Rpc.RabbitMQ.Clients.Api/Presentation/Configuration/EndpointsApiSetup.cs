@@ -1,12 +1,7 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Endipoints;
-using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
-using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
-using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Infra.Context;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Endpoints;
-using DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Validations;
-using FluentValidation;
 using Microsoft.AspNetCore.ResponseCompression;
 using Serilog;
 
@@ -23,9 +18,7 @@ public static class EndpointsApiSetup
     public static IServiceCollection AddEndpointsApiSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
-        services.AddScoped<IMainEndpoints, MainEndpoints>();
-        services.AddTransient<IValidator<ClientRequest>, ClientRouteValidator>();
-        
+
         MongoSetup.AddMongoDbConvention();
         services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
         services.AddSingleton<MongoDbContext>();

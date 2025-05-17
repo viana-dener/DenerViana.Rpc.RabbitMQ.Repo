@@ -8,13 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DenerViana-BuildingBlocks" Version="1.0.7" />
+    <PackageReference Include="DenerViana-BuildingBlocks" Version="1.0.9" />
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="8.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Cqrs\Events\" />
+    <Folder Include="Application\Cqrs\Queries\" />
     <Folder Include="Domain\Dtos\" />
   </ItemGroup>
 

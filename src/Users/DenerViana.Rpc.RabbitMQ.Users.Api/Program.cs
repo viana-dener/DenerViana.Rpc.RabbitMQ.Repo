@@ -35,6 +35,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 builder.Services.AddCorsSetup(builder.Configuration);
 builder.Services.AddHealthChecksSetup(builder.Configuration);
 builder.Services.AddSwaggerSetup(builder.Configuration);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddIocSetup();
 
 var app = builder.Build();

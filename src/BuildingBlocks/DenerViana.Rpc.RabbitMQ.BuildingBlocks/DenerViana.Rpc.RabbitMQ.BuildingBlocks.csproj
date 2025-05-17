@@ -16,10 +16,11 @@
     <RepositoryType>GitHub</RepositoryType>
     <Description>Os building blocks são projetados para serem independentes e autônomos, com funcionalidades específicas.  Essa abordagem modular facilita a criação, manutenção e evolução de software, pois permite que os desenvolvedores construam sistemas complexos a partir de partes menores e mais gerenciáveis.</Description>
     <Authors>Dener Viana</Authors>
-    <Version>1.0.7</Version>
+    <Version>1.0.10</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />

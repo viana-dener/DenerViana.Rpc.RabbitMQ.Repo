@@ -1,12 +1,7 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Endipoints;
-using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
-using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
-using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Context;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Endpoints;
-using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Validations;
-using FluentValidation;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -24,8 +19,7 @@ public static class EndpointsApiSetup
     public static IServiceCollection AddEndpointsApiSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
-        services.AddScoped<IMainEndpoints, MainEndpoints>();
-        services.AddTransient<IValidator<UserRequest>, UserRouteValidator>();
+
 
         services.AddDbContext<SqlServerDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"))
