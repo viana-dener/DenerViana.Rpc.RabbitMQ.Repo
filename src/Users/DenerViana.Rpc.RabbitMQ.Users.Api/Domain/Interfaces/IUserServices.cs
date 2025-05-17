@@ -10,5 +10,5 @@ public interface IUserServices
     Task<bool> ExistsAsync(Guid id);
     Task<bool> ExistsAsync(string email);
 
-    Task<bool> RegisterUserAsync(User account);
+    Task<bool> AddAsync(User account);
 }

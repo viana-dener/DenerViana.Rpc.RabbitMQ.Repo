@@ -1,33 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.16" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="DenerViana-BuildingBlocks" Version="1.0.7" />
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="8.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.25.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\AutoMapper\" />
-    <Folder Include="Application\Interfaces\" />
-    <Folder Include="Application\Models\Request\" />
-    <Folder Include="Application\Models\Response\" />
-    <Folder Include="Application\Services\" />
     <Folder Include="Domain\Dtos\" />
-    <Folder Include="Domain\Entities\" />
-    <Folder Include="Domain\Interfaces\" />
-    <Folder Include="Domain\Services\" />
-    <Folder Include="Infra\Context\" />
-    <Folder Include="Infra\Mappings\" />
-    <Folder Include="Infra\Repository\" />
-    <Folder Include="IoC\" />
-    <Folder Include="Presentation\Configuration\" />
-    <Folder Include="Presentation\Endpoints\" />
-    <Folder Include="Presentation\Validations\" />
   </ItemGroup>
 
 </Project>

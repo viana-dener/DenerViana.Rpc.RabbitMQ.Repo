@@ -32,8 +32,6 @@ builder.Host.UseSerilog((context, services, configuration) =>
         });
 });
 
-Log.Error("Aplicação iniciada.");
-
 builder.Services.AddCorsSetup(builder.Configuration);
 builder.Services.AddHealthChecksSetup(builder.Configuration);
 builder.Services.AddSwaggerSetup(builder.Configuration);

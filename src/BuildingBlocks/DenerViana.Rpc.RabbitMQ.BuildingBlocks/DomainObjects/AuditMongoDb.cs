@@ -9,6 +9,9 @@ public class AuditMongoDb
     [BsonIgnore]
     public Guid? CorrelationId { get; set; }
 
+    [BsonElement("createdId")]
+    public string CreatedId { get; set; }
+    
     [BsonElement("createdBy")]
     public string CreatedBy { get; set; }
 
@@ -16,9 +19,11 @@ public class AuditMongoDb
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [BsonElement("updatedBy")]
+    [BsonIgnoreIfNull]
     public string UpdatedBy { get; set; }
 
     [BsonElement("updatedAt")]
+    [BsonIgnoreIfNull]
     public DateTime? UpdatedAt { get; set; }
 
     #endregion

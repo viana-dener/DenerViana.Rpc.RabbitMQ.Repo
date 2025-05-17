@@ -6,7 +6,35 @@ namespace DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
 
 public static class ExtendedMethods
 {
+    #region Properties
+
     public const int TaxNumberLength = 9;
+    private static readonly List<string> Streets = ["Rua das Flores", "Avenida da Liberdade", "Travessa do Comércio", "Rua de São Bento", "Largo do Carmo"];
+    private static readonly List<string> Neighborhoods = ["Alfama", "Bairro Alto", "Baixa", "Paranhos", "Campanhã"];
+    private static readonly List<string> Cities = ["Lisboa", "Porto", "Coimbra", "Braga", "Faro"];
+    private static readonly List<string> Regions = ["Lisboa", "Norte", "Centro", "Alentejo", "Algarve"];
+    private static readonly List<string> PostalCodes = ["1000-001", "4000-002", "3000-003", "4700-004", "8000-005"];
+    private static readonly Random _random = new();
+
+    #endregion
+
+    public static Dictionary<string, object> GenerateAddressDictionary()
+    {
+        var index = _random.Next(0, Streets.Count);
+
+        return new Dictionary<string, object>
+        {
+            { "Street", Streets[index] },
+            { "Neighborhood", Neighborhoods[index] },
+            { "City", Cities[index] },
+            { "Region", Regions[index] },
+            { "Country", "Portugal" },
+            { "PostalCode", PostalCodes[index] },
+            { "Latitude", RandomCoordinate(36.9, 42.1) },
+            { "Longitude", RandomCoordinate(-9.5, -6.2) },
+            { "IsExcluded", false }
+        };
+    }
 
     public static string OnlyNumbers(this string input)
     {
@@ -83,4 +111,16 @@ public static class ExtendedMethods
         Guid result;
         return Guid.TryParseExact(input, "D", out result);
     }
+
+    #region Private Methods
+
+
+
+
+    private static double RandomCoordinate(double min, double max)
+    {
+        return Math.Round(min + _random.NextDouble() * (max - min), 6);
+    }
+
+    #endregion
 }

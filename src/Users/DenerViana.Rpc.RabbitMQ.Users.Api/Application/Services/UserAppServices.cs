@@ -35,7 +35,7 @@ public class UserAppServices(ILogInformation logInformation, INotify notify, IMa
         return _mapper.Map<UserDetailsResponse>(await _services.GetByNameAsync(name));
     }
 
-    public async Task<bool> RegisterUserAsync(RegisterUserRequest request, UserInfoDto userInfo)
+    public async Task<bool> AddAsync(UserRequest request, UserInfoDto userInfo)
     {
         if (await _services.ExistsAsync(request.Email))
         {
@@ -43,26 +43,21 @@ public class UserAppServices(ILogInformation logInformation, INotify notify, IMa
             return false;
         }
 
-        var account = new User(userInfo.Origin, request.Name, request.Email, request.Password, userInfo.UserId);
+        var account = new User(userInfo.Origin, request.Name, request.Email, request.Password, userInfo.UserId, userInfo.UserName);
 
-        var result = await _services.RegisterUserAsync(account);
-        if (result)
+        var result = await _services.AddAsync(account);
+        if (!result)
         {
-            _logInformation.PublicherLog("Usuário registrado com sucesso!");
-
-            // Lançar evento de integração: Usuário registrado event
-
-            //var aux = RegisteredUserEvent();
+            _notify.AddError("Error adding user", 500);
+            return false;
         }
 
+        _logInformation.PublicherLog("Usuário registrado com sucesso!");
+
+        // Lançar evento de integração: Usuário registrado event
 
         return result;
     }
-
-    #endregion
-
-    #region Preivate Methods
-
 
     #endregion
 }

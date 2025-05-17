@@ -22,15 +22,16 @@ public class User : EntityDb, IAggregateRoot
     #region Builders
 
     public User() { }
-    public User(string origin, string name, string email, string password, string createdBy)
+    public User(string origin, string name, string email, string password, string createdId, string createdBy)
     {
         Origin = origin;
         Name = name;
         Email = new Email(email);
         Password = password;
         IsExcluded = false;
+        CreatedId = createdId;
         CreatedBy = createdBy;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
     }
 
     #endregion

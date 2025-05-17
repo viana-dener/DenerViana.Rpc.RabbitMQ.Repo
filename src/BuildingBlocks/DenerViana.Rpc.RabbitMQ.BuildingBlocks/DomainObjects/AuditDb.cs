@@ -9,6 +9,7 @@ public class AuditDb
     [NotMapped]
     public Guid? CorrelationId { get; set; }
 
+    public string CreatedId { get; set; }
     public string CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string UpdatedBy { get; set; }

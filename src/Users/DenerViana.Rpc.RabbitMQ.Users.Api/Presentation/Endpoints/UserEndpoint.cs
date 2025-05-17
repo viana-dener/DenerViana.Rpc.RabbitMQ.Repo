@@ -42,13 +42,14 @@ public static class UserEndpoint
               Location = ResponseCacheLocation.Any
           });
 
-        app.MapPost("User", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, RegisterUserRequest User) =>
+        app.MapPost("User", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, UserRequest User) =>
         {
             var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
             var requiredHeaders = new Dictionary<string, bool>
             {
                 { "x-origin", true },
                 { "x-user-id", true },
+                { "x-user-name", true },
                 { "x-user-business-area", false },
                 { "x-correlation-id", true }
             };
@@ -57,16 +58,16 @@ public static class UserEndpoint
 
             var userInfo = CreateUserInfo(headers);
 
-            var result = await userApp.RegisterUserAsync(User, userInfo);
+            var result = await userApp.AddAsync(User, userInfo);
 
             return endpoint.CustomResponse(result);
 
-        }).AddEndpointFilter<ValidationFilter<RegisterUserRequest>>()
+        }).AddEndpointFilter<ValidationFilter<UserRequest>>()
           .WithName("PostUser")
           .WithOpenApi()
           .Produces<GenericResponse>(200)
           .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Register a new user")
+          .WithMetadata(new SwaggerOperationAttribute("Add a new user")
           {
               OperationId = "PostUser",
               Tags = new[] { " Users" }
@@ -88,7 +89,8 @@ public static class UserEndpoint
         {
             Origin = headers["x-origin"].ToString(),
             UserId = headers["x-user-id"].ToString(),
-            UserBusinessArea = headers.TryGetValue("x-user-business-area", out var businessArea) ? businessArea.ToString() : null,
+            UserName = headers["x-user-name"].ToString(),
+            UserBusinessArea = headers.TryGetValue("x-Client-business-area", out var businessArea) ? businessArea.ToString() : null,
             CorrelationId = headers["x-correlation-id"].ToString()
         };
     }

@@ -40,7 +40,7 @@ public class UserRepository(SqlServerDbContext context) : IUserRepository
         return await _context.User.AsNoTracking().Where(x => x.Email.Address.ToLower().Trim() == email.ToLower().Trim() && !x.IsExcluded).FirstOrDefaultAsync() != null;
     }
 
-    public async Task<bool> RegisterUserAsync(User account)
+    public async Task<bool> AddAsync(User account)
     {
         await _context.User.AddAsync(account);
         return await _context.SaveChangesAsync() > 0;

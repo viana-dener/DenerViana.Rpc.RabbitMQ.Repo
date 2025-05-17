@@ -11,7 +11,7 @@ public interface IUserRepository : IRepository<User>
     Task<bool> ExistsAsync(Guid id);
     Task<bool> ExistsAsync(string email);
 
-    Task<bool> RegisterUserAsync(User account);
+    Task<bool> AddAsync(User account);
 
     IUnitOfWork UnitOfWork { get; }
 }

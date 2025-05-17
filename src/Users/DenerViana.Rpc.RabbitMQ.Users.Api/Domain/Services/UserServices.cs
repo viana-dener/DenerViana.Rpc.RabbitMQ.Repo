@@ -35,9 +35,9 @@ public class UserServices(IUserRepository repository) : IUserServices
         return await _repository.ExistsAsync(email);
     }
 
-    public async Task<bool> RegisterUserAsync(User account)
+    public async Task<bool> AddAsync(User account)
     {
-       return await _repository.RegisterUserAsync(account);
+       return await _repository.AddAsync(account);
     }
 
     #endregion

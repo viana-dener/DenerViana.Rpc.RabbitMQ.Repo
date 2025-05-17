@@ -25,7 +25,7 @@ public static class EndpointsApiSetup
     {
         services.AddHttpContextAccessor();
         services.AddScoped<IMainEndpoints, MainEndpoints>();
-        services.AddTransient<IValidator<RegisterUserRequest>, RegisterUserRouteValidator>();
+        services.AddTransient<IValidator<UserRequest>, UserRouteValidator>();
 
         services.AddDbContext<SqlServerDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"))

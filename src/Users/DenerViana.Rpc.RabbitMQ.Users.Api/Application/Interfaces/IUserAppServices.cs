@@ -10,5 +10,5 @@ public interface IUserAppServices
     Task<UserDetailsResponse> GetByIdAsync(Guid id);
     Task<UserDetailsResponse> GetByNameAsync(string name);
 
-    Task<bool> RegisterUserAsync(RegisterUserRequest request, UserInfoDto userInfo);
+    Task<bool> AddAsync(UserRequest request, UserInfoDto userInfo);
 }
