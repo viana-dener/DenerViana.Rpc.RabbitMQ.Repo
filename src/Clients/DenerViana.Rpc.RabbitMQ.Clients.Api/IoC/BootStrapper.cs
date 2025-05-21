@@ -5,6 +5,7 @@ using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Notifications;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.AutoMapper;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Commands;
+using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Events;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Services;
@@ -43,7 +44,8 @@ public static class BootStrapper
         // Application
         services.AddScoped<IClientAppServices, ClientAppServices>();
         services.AddScoped<IRequestHandler<AddClientCommand, ValidationResult>, ClientCommandHandler>();
-        
+        services.AddScoped<INotificationHandler<ClientAddedEvent>, ClientEventHandler>();
+
         // Services
         services.AddScoped<IClientServices, ClientServices>();
 

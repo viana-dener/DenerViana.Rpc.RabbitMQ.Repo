@@ -1,4 +1,7 @@
-﻿namespace DenerViana.Rpc.RabbitMQ.BuildingBlocks.DomainObjects;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Messages;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DenerViana.Rpc.RabbitMQ.BuildingBlocks.DomainObjects;
 
 public class EntityDb : AuditDb
 {
@@ -6,9 +9,31 @@ public class EntityDb : AuditDb
 
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    [NotMapped]
+    private List<Event> _events;
+
     #endregion
 
     #region Public Methods
+
+    public IReadOnlyCollection<Event> Events => _events?.AsReadOnly();
+
+    public void AddEvent(Event eventItem)
+    {
+        _events ??= [];
+        _events.Add(eventItem);
+    }
+
+    public void RemoveEvent(Event eventItem)
+    {
+        _events?.Remove(eventItem);
+    }
+
+    public void ClearEvents()
+    {
+        _events?.Clear();
+    }
+
 
     public static bool operator ==(EntityDb a, EntityDb b)
     {

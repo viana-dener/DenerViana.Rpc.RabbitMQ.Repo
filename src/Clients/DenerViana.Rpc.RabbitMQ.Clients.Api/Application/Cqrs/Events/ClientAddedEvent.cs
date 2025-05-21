@@ -2,6 +2,10 @@
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Events;
 
+/// <summary>
+/// Represents a domain event that is triggered when a new client is added.
+/// Contains details such as the client's ID, name, email, tax number, and metadata related to the creation of the client.
+/// </summary>
 public class ClientAddedEvent : Event
 {
     public Guid Id { get; private set; }
@@ -25,5 +29,4 @@ public class ClientAddedEvent : Event
         CreatedId = createdId;
         CreatedBy = createdBy;
     }
-
 }

@@ -16,7 +16,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <Description>Os building blocks são projetados para serem independentes e autônomos.  Essa abordagem modular facilita a criação, manutenção e evolução de software, pois permite que os desenvolvedores construam sistemas complexos a partir de partes menores e mais gerenciáveis.</Description>
     <Authors>Dener Viana</Authors>
-    <Version>1.0.18</Version>
+    <Version>1.0.20</Version>
   </PropertyGroup>
 
   <ItemGroup>
