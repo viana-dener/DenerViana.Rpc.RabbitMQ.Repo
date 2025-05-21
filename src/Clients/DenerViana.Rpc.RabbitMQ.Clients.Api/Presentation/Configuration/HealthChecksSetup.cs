@@ -5,26 +5,29 @@ using Newtonsoft.Json;
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Configuration;
 
 /// <summary>
-/// Classe responsável pela configuração e inicialização dos serviços de Health Checks e Health Checks UI.
+/// Configures health checks for monitoring the application's status.
 /// </summary>
 public static class HealthChecksSetup
 {
     /// <summary>
-    /// Configura os serviços de Health Checks e Health Checks UI, adicionando verificações de saúde para a aplicação e banco de dados.
+    /// Adds health check services to the application, including MongoDB monitoring.
     /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configuration">The configuration settings.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddHealthChecksSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy())
             .AddMongoDb(configuration.GetConnectionString("MongoDbConnection"), name: "mongodb", tags: new[] { "db", "nosql" });
 
-
         return services;
     }
 
     /// <summary>
-    /// Configura o mapeamento dos endpoints de Health Checks e Health Checks UI na aplicação.
+    /// Configures the health check endpoint for external monitoring.
     /// </summary>
+    /// <param name="app">The web application instance.</param>
     public static void UseHealthChecksConfiguration(this WebApplication app)
     {
         app.MapHealthChecks("/health", new HealthCheckOptions
@@ -36,7 +39,8 @@ public static class HealthChecksSetup
                 var response = new
                 {
                     status = report.Status.ToString(),
-                    results = report.Entries.Select(e => new {
+                    results = report.Entries.Select(e => new
+                    {
                         key = e.Key,
                         status = e.Value.Status.ToString(),
                         description = e.Value.Description

@@ -12,11 +12,11 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Copyright>2025 VianaHub Web</Copyright>
+    <Copyright>2025 Dener Viana</Copyright>
     <RepositoryType>GitHub</RepositoryType>
-    <Description>Os building blocks são projetados para serem independentes e autônomos, com funcionalidades específicas.  Essa abordagem modular facilita a criação, manutenção e evolução de software, pois permite que os desenvolvedores construam sistemas complexos a partir de partes menores e mais gerenciáveis.</Description>
+    <Description>Os building blocks são projetados para serem independentes e autônomos.  Essa abordagem modular facilita a criação, manutenção e evolução de software, pois permite que os desenvolvedores construam sistemas complexos a partir de partes menores e mais gerenciáveis.</Description>
     <Authors>Dener Viana</Authors>
-    <Version>1.0.10</Version>
+    <Version>1.0.18</Version>
   </PropertyGroup>
 
   <ItemGroup>

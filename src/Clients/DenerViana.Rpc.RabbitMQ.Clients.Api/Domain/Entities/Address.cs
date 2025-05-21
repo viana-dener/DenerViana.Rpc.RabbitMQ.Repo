@@ -1,10 +1,9 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Extensions;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Entities;
 
 /// <summary>
-/// 
+/// Represents an address with various location details.
 /// </summary>
 public class Address
 {

@@ -11,36 +11,38 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Endpoints;
 
+/// <summary>
+/// Defines API endpoints for client operations.
+/// </summary>
 public static class ClientEndpoint
 {
     #region Public Methods
 
     /// <summary>
-    /// Mapeia os endpoints relacionados ao produtor na aplicação, incluindo operações de listagem e cadastro de contas.
-    /// Define as rotas, filtros, metadados do Swagger, cache de resposta e validação de cabeçalhos.
+    /// Maps client-related endpoints in the web application.
     /// </summary>
+    /// <param name="app">The web application instance.</param>
     public static void MapClientEndpoint(this WebApplication app)
     {
         app.MapGet("Client", async (IMainEndpoints endpoint, IClientAppServices ClientApp) =>
         {
             var result = await ClientApp.GetAllAsync();
-
             return endpoint.CustomResponse(result);
-
-        }).WithName("GetClients")
-          .WithOpenApi()
-          .Produces<IEnumerable<ClientResponse>>(200)
-          .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Get all clients")
-          {
-              OperationId = "GetClients",
-              Tags = new[] { " Clients" }
-          })
-          .WithMetadata(new ResponseCacheAttribute
-          {
-              Duration = 60,
-              Location = ResponseCacheLocation.Any
-          });
+        })
+        .WithName("GetClients")
+        .WithOpenApi()
+        .Produces<IEnumerable<ClientResponse>>(200)
+        .Produces<ErrorResponse>(400)
+        .WithMetadata(new SwaggerOperationAttribute("Get all clients")
+        {
+            OperationId = "GetClients",
+            Tags = new[] { "Clients" }
+        })
+        .WithMetadata(new ResponseCacheAttribute
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        });
 
         app.MapPost("Client", async (INotify notify, IMainEndpoints endpoint, IClientAppServices ClientApp, ClientRequest client) =>
         {
@@ -54,29 +56,29 @@ public static class ClientEndpoint
                 { "x-correlation-id", true }
             };
 
+            // Validate headers
             if (!HeadersValidate(notify, headers, requiredHeaders)) return endpoint.CustomResponse();
 
             var clientInfo = CreateClientInfo(headers);
-
             var result = await ClientApp.AddAsync(client, clientInfo);
 
             return endpoint.CustomResponse(result);
-
-        }).AddEndpointFilter<ValidationFilter<ClientRequest>>()
-          .WithName("PostClient")
-          .WithOpenApi()
-          .Produces<GenericResponse>(200)
-          .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Add a new Client")
-          {
-              OperationId = "PostClient",
-              Tags = new[] { " Clients" }
-          })
-          .WithMetadata(new ResponseCacheAttribute
-          {
-              Duration = 60,
-              Location = ResponseCacheLocation.Any
-          });
+        })
+        .AddEndpointFilter<ValidationFilter<ClientRequest>>()
+        .WithName("PostClient")
+        .WithOpenApi()
+        .Produces<GenericResponse>(200)
+        .Produces<ErrorResponse>(400)
+        .WithMetadata(new SwaggerOperationAttribute("Add a new Client")
+        {
+            OperationId = "PostClient",
+            Tags = new[] { "Clients" }
+        })
+        .WithMetadata(new ResponseCacheAttribute
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        });
     }
 
     #endregion
@@ -90,10 +92,11 @@ public static class ClientEndpoint
             Origin = headers["x-origin"].ToString(),
             UserId = headers["x-user-id"].ToString(),
             UserName = headers["x-user-name"].ToString(),
-            UserBusinessArea = headers.TryGetValue("x-Client-business-area", out var businessArea) ? businessArea.ToString() : null,
+            UserBusinessArea = headers.TryGetValue("x-user-business-area", out var businessArea) ? businessArea.ToString() : null,
             CorrelationId = headers["x-correlation-id"].ToString()
         };
     }
+
     private static bool HeadersValidate(INotify notify, IHeaderDictionary headers, Dictionary<string, bool> requiredHeaders)
     {
         var headerValidate = ExtendedMethods.ValidateHeaders(headers, requiredHeaders);
@@ -101,7 +104,7 @@ public static class ClientEndpoint
         {
             foreach (var item in headerValidate.Errors)
             {
-                notify.AddError(item.Key + ", " + item.Value);
+                notify.AddError($"{item.Key}, {item.Value}");
             }
         }
 

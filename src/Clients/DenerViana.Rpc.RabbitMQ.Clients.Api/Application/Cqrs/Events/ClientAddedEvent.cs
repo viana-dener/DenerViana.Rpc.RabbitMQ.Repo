@@ -1,12 +1,8 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Messages;
-using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Validations;
 
-namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Commands;
+namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Events;
 
-/// <summary>
-/// Represents a command to add a new client to the system.
-/// </summary>
-public class AddClientCommand : Command
+public class ClientAddedEvent : Event
 {
     public Guid Id { get; private set; }
     public string Origin { get; private set; }
@@ -17,7 +13,7 @@ public class AddClientCommand : Command
     public string CreatedId { get; private set; }
     public string CreatedBy { get; private set; }
 
-    public AddClientCommand(Guid id, string origin, string name, string email, string taxNumber, string correlationId, string createdId, string createdBy)
+    public ClientAddedEvent(Guid id, string origin, string name, string email, string taxNumber, string correlationId, string createdId, string createdBy)
     {
         Id = id;
         AggregateId = id;
@@ -30,9 +26,4 @@ public class AddClientCommand : Command
         CreatedBy = createdBy;
     }
 
-    public override bool IsValid()
-    {
-        ValidationResult = new AddClientValidation().Validate(this);
-        return ValidationResult.IsValid;
-    }
 }

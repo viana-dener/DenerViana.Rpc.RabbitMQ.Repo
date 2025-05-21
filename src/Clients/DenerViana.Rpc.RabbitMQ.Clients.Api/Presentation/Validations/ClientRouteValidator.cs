@@ -4,10 +4,18 @@ using FluentValidation;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Validations;
 
+/// <summary>
+/// Validates client request data and route parameters.
+/// </summary>
 public class ClientRouteValidator : AbstractValidator<ClientRequest>
 {
     #region Constructors
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ClientRouteValidator"/> class 
+    /// and performs route validation.
+    /// </summary>
+    /// <param name="context">The HTTP context accessor.</param>
     public ClientRouteValidator(IHttpContextAccessor context)
     {
         ValidateRoute(context);

@@ -1,12 +1,13 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.DomainObjects;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Entities;
 
 /// <summary>
-/// 
+/// Represents a client entity in the system.
 /// </summary>
-public class Client : EntityMongoDb
+public class Client : EntityMongoDb, IAggregateRoot
 {
     #region Properties
 
@@ -57,7 +58,9 @@ public class Client : EntityMongoDb
     #region Public Methods
 
     public void Exclude() => IsExcluded = true;
+
     public void SetPicture(string picture) => Picture = picture;
+
     public void SetAddress(string street, string neighborhood, string city, string region, string country, string postalCode, double? latitude, double? longitude)
     {
         Address.Add(new Address
@@ -73,7 +76,9 @@ public class Client : EntityMongoDb
             IsExcluded = false
         });
     }
+
     public void UpdateEmail(string email) => Email = email;
+
     public override string ToString() => $"{Name}, {Email}, {TaxNumber}";
 
     #endregion

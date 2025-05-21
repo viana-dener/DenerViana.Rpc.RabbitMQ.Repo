@@ -9,11 +9,14 @@ using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Interfaces;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Services;
 
-public class ClientAppServices(ILogInformation logInformation, INotify notify, IMapper mapper, IClientServices services) : IClientAppServices
+/// <summary>
+/// Provides application services for managing client operations.
+/// </summary>
+public class ClientAppServices(ILog log, INotify notify, IMapper mapper, IClientServices services) : IClientAppServices
 {
     #region Properties
 
-    private readonly ILogInformation _logInformation = logInformation;
+    private readonly ILog _log = log;
     private readonly INotify _notify = notify;
     private readonly IMapper _mapper = mapper;
     private readonly IClientServices _services = services;
@@ -34,31 +37,45 @@ public class ClientAppServices(ILogInformation logInformation, INotify notify, I
     {
         return _mapper.Map<ClientDetailsResponse>(await _services.GetByNameAsync(name));
     }
+
     public async Task<bool> AddAsync(ClientRequest request, UserInfoDto userInfo)
     {
+        // Validate if client already exists
         if (await _services.ExistsAsync(request.Name))
         {
             _notify.AddError("Client already exists", 409);
             return false;
         }
 
+        // Create client entity
         var client = new Domain.Entities.Client(request.Id, userInfo.Origin, request.Name, request.Email, request.TaxNumber, userInfo.UserId, userInfo.UserName);
         if (client != null)
         {
             var address = ExtendedMethods.GenerateAddressDictionary();
-            client.SetAddress(address["Street"].ToString(), address["Neighborhood"].ToString(), address["City"].ToString(), address["Region"].ToString(), address["Country"].ToString(), address["PostalCode"].ToString(), (double)address["Latitude"], (double)address["Longitude"]);
+            client.SetAddress(
+                address["Street"].ToString(),
+                address["Neighborhood"].ToString(),
+                address["City"].ToString(),
+                address["Region"].ToString(),
+                address["Country"].ToString(),
+                address["PostalCode"].ToString(),
+                (double)address["Latitude"],
+                (double)address["Longitude"]
+            );
         }
 
+        // Persist client entity
         var result = await _services.AddAsync(client);
         if (!result)
         {
-            _notify.AddError("Error adding client", 500);
+            _notify.AddError("Error adding client", 400);
             return false;
         }
 
-         _logInformation.PublicherLog($"Client {client.Name} added with success by {userInfo.UserId}");
+        // Log successful addition
+        _log.Publish(LogLevel.Information, $"Client {client.Name} added successfully by {userInfo.UserId}");
 
-        // Lançar evento de integração: Client registrado event
+        // Trigger integration event: Client registered event
 
         return result;
     }

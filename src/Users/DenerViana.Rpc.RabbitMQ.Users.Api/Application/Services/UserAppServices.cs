@@ -9,11 +9,11 @@ using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Interfaces;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Application.Services;
 
-public class UserAppServices(ILogInformation logInformation, INotify notify, IMapper mapper, IUserServices services) : IUserAppServices
+public class UserAppServices(ILog log, INotify notify, IMapper mapper, IUserServices services) : IUserAppServices
 {
     #region Properties
 
-    private readonly ILogInformation _logInformation = logInformation;
+    private readonly ILog _log = log;
     private readonly INotify _notify = notify;
     private readonly IMapper _mapper = mapper;
     private readonly IUserServices _services = services;
@@ -52,7 +52,7 @@ public class UserAppServices(ILogInformation logInformation, INotify notify, IMa
             return false;
         }
 
-        _logInformation.PublicherLog("Usuário registrado com sucesso!");
+        _log.Publish(LogLevel.Information, "Usuário registrado com sucesso!");
 
         // Lançar evento de integração: Usuário registrado event
 

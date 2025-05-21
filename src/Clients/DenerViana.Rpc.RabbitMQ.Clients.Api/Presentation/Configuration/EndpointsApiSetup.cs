@@ -8,13 +8,16 @@ using Serilog;
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Configuration;
 
 /// <summary>
-/// Classe responsavel por definir configurações de pipeline da API
+/// Configures API-related services and middleware for the application.
 /// </summary>
 public static class EndpointsApiSetup
 {
     /// <summary>
-    /// Método de extensão que estende configurações das interfaces IServiceCollection e IConfiguration
+    /// Adds necessary configurations and services for the API endpoints.
     /// </summary>
+    /// <param name="services">The service collection to which dependencies will be added.</param>
+    /// <param name="configuration">The configuration settings for the application.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddEndpointsApiSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
@@ -40,11 +43,11 @@ public static class EndpointsApiSetup
     }
 
     /// <summary>
-    /// Método de extensão que estende configurações da WebApplication
+    /// Configures middleware and API behavior for request handling.
     /// </summary>
+    /// <param name="app">The web application instance.</param>
     public static void UseEndpointsApiConfiguration(this WebApplication app)
     {
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -71,6 +74,7 @@ public static class EndpointsApiSetup
 
         app.UseResponseCompression();
         app.UseHttpsRedirection();
+
         app.MapClientEndpoint();
     }
 }

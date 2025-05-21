@@ -1,5 +1,8 @@
 ﻿namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Request;
 
+/// <summary>
+/// Represents a request to create or update a client.
+/// </summary>
 public class ClientRequest
 {
     public Guid Id { get; set; } = Guid.NewGuid();

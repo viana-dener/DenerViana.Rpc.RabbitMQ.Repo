@@ -1,5 +1,8 @@
 ﻿namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Response;
 
+/// <summary>
+/// Represents a response containing address details.
+/// </summary>
 public class AddressResponse
 {
     public string Street { get; set; }

@@ -30,7 +30,7 @@ public static class BootStrapper
 
         // Domain
         services.AddScoped<INotify, Notify>();
-        services.AddScoped<ILogInformation, LogInformation>();
+        services.AddScoped<ILog, Log>();
         services.AddScoped<IUserServices, UserServices>();
 
         // Repository

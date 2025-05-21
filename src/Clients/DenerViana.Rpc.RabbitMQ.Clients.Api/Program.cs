@@ -5,6 +5,9 @@ using DenerViana.Rpc.RabbitMQ.Clients.Api.Presentation.Configuration;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
+/// <summary>
+/// Configures and builds the web application.
+/// </summary>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();

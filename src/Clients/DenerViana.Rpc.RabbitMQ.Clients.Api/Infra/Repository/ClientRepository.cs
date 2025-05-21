@@ -1,15 +1,21 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Extensions;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Entities;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Interfaces;
 using MongoDB.Driver;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.Infra.Repository;
 
+/// <summary>
+/// Provides repository methods for accessing and managing client data in MongoDB.
+/// </summary>
 public class ClientRepository(IMongoDbContext context) : IClientRepository
 {
     #region Properties
 
     private readonly IMongoDbContext _context = context;
+
+    public IUnitOfWork UnitOfWork => (IUnitOfWork)context;
 
     #endregion
 
@@ -19,28 +25,33 @@ public class ClientRepository(IMongoDbContext context) : IClientRepository
     {
         return await _context.Clients.Find(_ => true).ToListAsync();
     }
+
     public async Task<Client> GetByIdAsync(Guid id)
     {
         var filter = Builders<Client>.Filter.Eq(p => p.Id, id);
         return await _context.Clients.Find(filter).FirstOrDefaultAsync();
     }
+
     public async Task<Client> GetByNameAsync(string name)
     {
         var filter = Builders<Client>.Filter.Eq(p => p.Name, name);
         return await _context.Clients.Find(filter).FirstOrDefaultAsync();
     }
+
     public async Task<bool> ExistsAsync(Guid id)
     {
         var filter = Builders<Client>.Filter.Eq(p => p.Id, id);
-        var product = await _context.Clients.Find(filter).FirstOrDefaultAsync();
-        return product != null;
+        var client = await _context.Clients.Find(filter).FirstOrDefaultAsync();
+        return client != null;
     }
-    public async Task<bool> ExistsAsync(string name)
+
+    public async Task<bool> ExistsAsync(string taxNumber)
     {
-        var filter = Builders<Client>.Filter.Eq(p => p.Name, name);
-        var product = await _context.Clients.Find(filter).FirstOrDefaultAsync();
-        return product != null;
+        var filter = Builders<Client>.Filter.Eq(p => p.TaxNumber, taxNumber);
+        var client = await _context.Clients.Find(filter).FirstOrDefaultAsync();
+        return client != null;
     }
+
     public async Task<bool> AddAsync(Client client)
     {
         try
@@ -50,11 +61,36 @@ public class ClientRepository(IMongoDbContext context) : IClientRepository
         }
         catch (MongoWriteException ex) when (ex.WriteError.Code == 11000)
         {
-            throw new DataException("A product with the same ID already exists.", 409);
+            throw new DataException("A client with the same ID already exists.", 409);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new DataException("An error occurred while adding the product.", 500);
+            throw new DataException("An error occurred while adding the client.", 500);
+        }
+    }
+
+    #endregion
+
+    #region IDisposable Implementation
+
+    private bool _disposed;
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _context?.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 

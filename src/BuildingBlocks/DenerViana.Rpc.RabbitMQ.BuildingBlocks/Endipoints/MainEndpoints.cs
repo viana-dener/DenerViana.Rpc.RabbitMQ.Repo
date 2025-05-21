@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using System.Net;
 
 namespace DenerViana.Rpc.RabbitMQ.BuildingBlocks.Endipoints;
 
@@ -64,11 +65,12 @@ public class MainEndpoints(ILogger<MainEndpoints> logger, IHttpContextAccessor h
         var requestLog = _httpContextAccessor?.HttpContext?.Items["RequestLogDto"] as RequestLogDto;
 
         using (LogContext.PushProperty("CorrelationId", requestLog.CorrelationId))
-        using (LogContext.PushProperty("StatusCode", _notify.GetStatusCode()))
+        using (LogContext.PushProperty("RequestMethod", requestLog.Method))
+        using (LogContext.PushProperty("StatusCode", (HttpStatusCode)_notify.GetStatusCode()))
         using (LogContext.PushProperty("Headers", requestLog.Headers))
         using (LogContext.PushProperty("Payload", requestLog.Payload))
         {
-            _logger.LogError("Error(s) {Message}", _notify.GetErrors());
+            _logger.LogError(string.Join(" | ", _notify.GetErrors()));
 
             return Results.BadRequest(new ErrorResponse
             {

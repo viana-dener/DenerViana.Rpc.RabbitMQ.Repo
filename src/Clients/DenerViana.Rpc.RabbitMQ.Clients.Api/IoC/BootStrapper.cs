@@ -19,23 +19,32 @@ using MediatR;
 
 namespace DenerViana.Rpc.RabbitMQ.Clients.Api.IoC;
 
+/// <summary>
+/// Provides dependency injection setup for the application.
+/// </summary>
 public static class BootStrapper
 {
+    /// <summary>
+    /// Configures and registers dependencies in the IoC container.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The updated service collection.</returns>
     public static IServiceCollection AddIocSetup(this IServiceCollection services)
     {
-        // Infraestructure
+        services.AddAutoMapper(typeof(MappingProfile));
         services.AddScoped<IMainEndpoints, MainEndpoints>();
         services.AddScoped<IMediatorHandler, MediatorHandler>();
+        services.AddScoped<ILog, Log>();
+        services.AddScoped<INotify, Notify>();
+
+        // Presentation
         services.AddTransient<IValidator<ClientRequest>, ClientRouteValidator>();
 
-        // Applications
-        services.AddAutoMapper(typeof(MappingProfile));
+        // Application
         services.AddScoped<IClientAppServices, ClientAppServices>();
         services.AddScoped<IRequestHandler<AddClientCommand, ValidationResult>, ClientCommandHandler>();
-
-        // Domain
-        services.AddScoped<INotify, Notify>();
-        services.AddScoped<ILogInformation, LogInformation>();
+        
+        // Services
         services.AddScoped<IClientServices, ClientServices>();
 
         // Repository

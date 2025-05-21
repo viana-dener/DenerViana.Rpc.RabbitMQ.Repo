@@ -86,11 +86,12 @@ public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddlewa
         var requestLog = httpContext?.Items["RequestLogDto"] as RequestLogDto;
 
         using (LogContext.PushProperty("CorrelationId", requestLog.CorrelationId))
-        using (LogContext.PushProperty("StatusCode", (int)statusCode))
+        using (LogContext.PushProperty("RequestMethod", requestLog.Method))
+        using (LogContext.PushProperty("StatusCode", statusCode))
         using (LogContext.PushProperty("Headers", requestLog.Headers))
         using (LogContext.PushProperty("Payload", requestLog.Payload))
         {
-            _logger.LogError(ex, "Error(s) {Message}", ex.Message);
+            _logger.LogError(ex, ex.Message);
         }
     }
 }
