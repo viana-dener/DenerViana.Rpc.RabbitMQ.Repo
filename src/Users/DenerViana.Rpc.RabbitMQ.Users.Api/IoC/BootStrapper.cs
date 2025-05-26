@@ -9,17 +9,26 @@ using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Services;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Services;
-using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Repository;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Data.Repository;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Validations;
 using FluentValidation;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.IoC;
 
+/// <summary>
+/// Provides extension methods to configure Dependency Injection (IoC) for the application.
+/// Registers infrastructure, application, domain services, and repositories into the IServiceCollection.
+/// </summary>
 public static class BootStrapper
 {
+    /// <summary>
+    /// Adds the IoC container setup for services used in the application.
+    /// </summary>
+    /// <param name="services">The IServiceCollection to add the services to.</param>
+    /// <returns>The updated IServiceCollection with registered services.</returns>
     public static IServiceCollection AddIocSetup(this IServiceCollection services)
     {
-        // Infraestructure
+        // Infrastructure
         services.AddScoped<IMainEndpoints, MainEndpoints>();
         services.AddScoped<IMediatorHandler, MediatorHandler>();
         services.AddTransient<IValidator<UserRequest>, UserRouteValidator>();

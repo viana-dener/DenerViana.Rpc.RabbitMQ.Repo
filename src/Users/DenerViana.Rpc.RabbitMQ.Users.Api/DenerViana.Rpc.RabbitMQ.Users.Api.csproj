@@ -24,9 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Cqrs\Events\" />
-    <Folder Include="Application\Cqrs\Queries\" />
     <Folder Include="Domain\Dtos\" />
+    <Folder Include="Infra\Integration\" />
   </ItemGroup>
 
 </Project>

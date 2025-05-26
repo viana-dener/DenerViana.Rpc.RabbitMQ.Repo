@@ -6,13 +6,17 @@ using System.Reflection;
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Configuration;
 
 /// <summary>
-/// Classe responsavel por definir configurações do Swagger
+/// Provides extension methods to configure Swagger services for API documentation.
 /// </summary>
 public static class SwaggerSetup
 {
     /// <summary>
-    /// Método de extensão que estende configurações das interfaces IServiceCollection e IConfiguration
+    /// Adds and configures Swagger generation services based on application settings.
+    /// Includes enabling annotations, API metadata, contact, license, and XML comments.
     /// </summary>
+    /// <param name="services">The IServiceCollection to add Swagger services to.</param>
+    /// <param name="configuration">The application configuration instance for loading settings.</param>
+    /// <returns>The updated IServiceCollection with Swagger services registered.</returns>
     public static IServiceCollection AddSwaggerSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSwaggerGen(s =>
@@ -48,4 +52,3 @@ public static class SwaggerSetup
         return services;
     }
 }
-

@@ -11,37 +11,40 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Endpoints;
 
+/// <summary>
+/// Defines HTTP endpoints related to User operations, including retrieving all users and adding a new user.
+/// Handles request validation, header extraction, and integrates with application services for business logic.
+/// </summary>
 public static class UserEndpoint
 {
-    #region Public Methods
-
     /// <summary>
-    /// Mapeia os endpoints relacionados ao produtor na aplicação, incluindo operações de listagem e cadastro de contas.
-    /// Define as rotas, filtros, metadados do Swagger, cache de resposta e validação de cabeçalhos.
+    /// Maps user-related endpoints (GET and POST) to the application's routing pipeline.
     /// </summary>
+    /// <param name="app">The <see cref="WebApplication"/> to add the endpoints to.</param>
     public static void MapUserEndpoint(this WebApplication app)
     {
+        // GET /users - Retrieves all users.
         app.MapGet("users", async (IMainEndpoints endpoint, IUserAppServices userApp) =>
         {
             var result = await userApp.GetAllAsync();
-
             return endpoint.CustomResponse(result);
+        })
+        .WithName("GetUsers")
+        .WithOpenApi()
+        .Produces<IEnumerable<UserResponse>>(200)
+        .Produces<ErrorResponse>(400)
+        .WithMetadata(new SwaggerOperationAttribute("Get all users")
+        {
+            OperationId = "GetUsers",
+            Tags = new[] { "Users" }
+        })
+        .WithMetadata(new ResponseCacheAttribute
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        });
 
-        }).WithName("GetUsers")
-          .WithOpenApi()
-          .Produces<IEnumerable<UserResponse>>(200)
-          .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Get all users")
-          {
-              OperationId = "GetUsers",
-              Tags = new[] { " Users" }
-          })
-          .WithMetadata(new ResponseCacheAttribute
-          {
-              Duration = 60,
-              Location = ResponseCacheLocation.Any
-          });
-
+        // POST /users - Adds a new user after validating headers and request body.
         app.MapPost("users", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, UserRequest User) =>
         {
             var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
@@ -62,27 +65,27 @@ public static class UserEndpoint
 
             return endpoint.CustomResponse(result);
 
-        }).AddEndpointFilter<ValidationFilter<UserRequest>>()
-          .WithName("PostUser")
-          .WithOpenApi()
-          .Produces<GenericResponse>(200)
-          .Produces<ErrorResponse>(400)
-          .WithMetadata(new SwaggerOperationAttribute("Add a new user")
-          {
-              OperationId = "PostUser",
-              Tags = new[] { " Users" }
-          })
-          .WithMetadata(new ResponseCacheAttribute
-          {
-              Duration = 60,
-              Location = ResponseCacheLocation.Any
-          });
+        })
+        .AddEndpointFilter<ValidationFilter<UserRequest>>()
+        .WithName("PostUser")
+        .WithOpenApi()
+        .Produces<GenericResponse>(200)
+        .Produces<ErrorResponse>(400)
+        .WithMetadata(new SwaggerOperationAttribute("Add a new user")
+        {
+            OperationId = "PostUser",
+            Tags = new[] { "Users" }
+        })
+        .WithMetadata(new ResponseCacheAttribute
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Any
+        });
     }
 
-    #endregion
-
-    #region Private Methods
-
+    /// <summary>
+    /// Extracts user information from HTTP headers.
+    /// </summary>
     private static UserInfoDto CreateUserInfo(IHeaderDictionary headers)
     {
         return new UserInfoDto()
@@ -94,6 +97,10 @@ public static class UserEndpoint
             CorrelationId = headers["x-correlation-id"].ToString()
         };
     }
+
+    /// <summary>
+    /// Validates required HTTP headers and reports errors via the notification service.
+    /// </summary>
     private static bool HeadersValidate(INotify notify, IHeaderDictionary headers, Dictionary<string, bool> requiredHeaders)
     {
         var headerValidate = ExtendedMethods.ValidateHeaders(headers, requiredHeaders);
@@ -107,6 +114,4 @@ public static class UserEndpoint
 
         return headerValidate.Result;
     }
-
-    #endregion
 }

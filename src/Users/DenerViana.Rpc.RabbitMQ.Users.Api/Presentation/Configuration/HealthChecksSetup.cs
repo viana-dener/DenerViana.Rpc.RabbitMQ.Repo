@@ -5,13 +5,17 @@ using Newtonsoft.Json;
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Configuration;
 
 /// <summary>
-/// Classe responsável pela configuração e inicialização dos serviços de Health Checks e Health Checks UI.
+/// Provides extension methods for configuring health checks services and middleware.
 /// </summary>
 public static class HealthChecksSetup
 {
     /// <summary>
-    /// Configura os serviços de Health Checks e Health Checks UI, adicionando verificações de saúde para a aplicação e banco de dados.
+    /// Adds health check services to the dependency injection container,
+    /// including a self-check and SQL Server database health check.
     /// </summary>
+    /// <param name="services">The IServiceCollection to add the health checks to.</param>
+    /// <param name="configuration">The application configuration instance to retrieve connection strings.</param>
+    /// <returns>The updated IServiceCollection with health checks registered.</returns>
     public static IServiceCollection AddHealthChecksSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthChecks()
@@ -22,8 +26,10 @@ public static class HealthChecksSetup
     }
 
     /// <summary>
-    /// Configura o mapeamento dos endpoints de Health Checks e Health Checks UI na aplicação.
+    /// Configures the application to use health check endpoints with a custom JSON response writer.
+    /// The health endpoint responds with overall status and details for each health check registered.
     /// </summary>
+    /// <param name="app">The WebApplication instance to configure.</param>
     public static void UseHealthChecksConfiguration(this WebApplication app)
     {
         app.MapHealthChecks("/health", new HealthCheckOptions

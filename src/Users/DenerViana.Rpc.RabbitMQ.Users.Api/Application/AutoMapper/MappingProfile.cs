@@ -5,6 +5,10 @@ using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Entities;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Application.AutoMapper;
 
+/// <summary>
+/// AutoMapper profile that defines object-object mappings between domain entities and DTOs related to <see cref="User"/>.
+/// Includes mappings for request and response models.
+/// </summary>
 public class MappingProfile : Profile
 {
     public MappingProfile()

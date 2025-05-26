@@ -1,30 +1,22 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
-using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
+﻿using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
 using FluentValidation;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Validations;
 
 /// <summary>
-/// Validador de regras para a requisição de registro de usuário (<see cref="UserRequest"/>),
-/// utilizando FluentValidation. Aplica validações para propriedades do modelo, como nome, e-mail, CPF, senha,
-/// confirmação de senha e, condicionalmente, o parâmetro de rota "id" dependendo do método HTTP.
+/// Validator for the UserRequest route and model, applying rules based on the current HTTP request context.
 /// </summary>
 public class UserRouteValidator : AbstractValidator<UserRequest>
 {
-    #region Builders
-
     /// <summary>
-    /// Inicializa uma nova instância de <see cref="UserRouteValidator"/> e aplica as regras de validação
-    /// com base no contexto da requisição HTTP atual.
+    /// Initializes a new instance of the <see cref="UserRouteValidator"/> class
+    /// and applies validation rules considering the current HTTP method and route data.
     /// </summary>
+    /// <param name="context">Accessor to the current HTTP context.</param>
     public UserRouteValidator(IHttpContextAccessor context)
     {
         ValidateRoute(context);
     }
-
-    #endregion
-
-    #region Private Methods
 
     private void ValidateRoute(IHttpContextAccessor context)
     {
@@ -38,16 +30,16 @@ public class UserRouteValidator : AbstractValidator<UserRequest>
 
             RuleFor(x => id)
                 .NotEmpty()
-                .WithMessage("The field id is required.")
+                .WithMessage("The id field is required.")
                 .MaximumLength(36)
                 .WithMessage("The id field must have a maximum of 36 characters.")
                 .Must(ValidateGuid)
-                .WithMessage("The value entered in the field is not a valid Guid.");
+                .WithMessage("The value entered in the id field is not a valid Guid.");
         }
 
         RuleFor(model => model.Name)
             .NotEmpty()
-            .WithMessage("The field name is required.")
+            .WithMessage("The name field is required.")
             .MinimumLength(3)
             .WithMessage("The name field must have at least 3 characters.")
             .MaximumLength(255)
@@ -55,23 +47,22 @@ public class UserRouteValidator : AbstractValidator<UserRequest>
 
         RuleFor(model => model.TaxNumber)
             .NotEmpty()
-            .WithMessage("The field taxNumber is required.")
+            .WithMessage("The taxNumber field is required.")
             .MaximumLength(9)
             .WithMessage("The taxNumber field must have a maximum of 9 characters.");
 
         RuleFor(model => model.Email)
             .NotEmpty()
-            .WithMessage("The field email is required.")
+            .WithMessage("The email field is required.")
             .EmailAddress()
             .MinimumLength(5)
             .WithMessage("The email field must have at least 5 characters.")
             .MaximumLength(254)
             .WithMessage("The email field must have a maximum of 254 characters.");
 
-        // Validação para senha forte
         RuleFor(model => model.Password)
             .NotEmpty()
-            .WithMessage("The field password is required.")
+            .WithMessage("The password field is required.")
             .MinimumLength(8)
             .WithMessage("The password field must have at least 8 characters.")
             .MaximumLength(255)
@@ -81,7 +72,7 @@ public class UserRouteValidator : AbstractValidator<UserRequest>
 
         RuleFor(model => model.ConfirmPassword)
             .NotEmpty()
-            .WithMessage("The field confirmPassword is required.")
+            .WithMessage("The confirmPassword field is required.")
             .MinimumLength(8)
             .WithMessage("The confirmPassword field must have at least 8 characters.")
             .MaximumLength(255)
@@ -94,8 +85,6 @@ public class UserRouteValidator : AbstractValidator<UserRequest>
 
     private static bool ValidateGuid(string id)
     {
-        return id.IsGuid();
+        return Guid.TryParse(id, out _);
     }
-
-    #endregion
 }

@@ -1,6 +1,6 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Middlewares;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
-using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Context;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Data.Context;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Endpoints;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +9,20 @@ using Serilog;
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Configuration;
 
 /// <summary>
-/// Classe responsavel por definir configurações de pipeline da API
+/// Provides extension methods for configuring API endpoints, middleware, and related services.
 /// </summary>
 public static class EndpointsApiSetup
 {
     /// <summary>
-    /// Método de extensão que estende configurações das interfaces IServiceCollection e IConfiguration
+    /// Configures services required for API endpoints, including DbContext, controllers,
+    /// JSON serialization, response compression, and app settings binding.
     /// </summary>
+    /// <param name="services">The IServiceCollection to add the services to.</param>
+    /// <param name="configuration">The application configuration instance.</param>
+    /// <returns>The updated IServiceCollection with registered services.</returns>
     public static IServiceCollection AddEndpointsApiSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpContextAccessor();
-
 
         services.AddDbContext<SqlServerDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"))
@@ -51,11 +54,12 @@ public static class EndpointsApiSetup
     }
 
     /// <summary>
-    /// Método de extensão que estende configurações da WebApplication
+    /// Configures the HTTP request pipeline with middleware for Swagger, logging, exception handling,
+    /// response compression, HTTPS redirection, and endpoint mapping.
     /// </summary>
+    /// <param name="app">The WebApplication to configure.</param>
     public static void UseEndpointsApiConfiguration(this WebApplication app)
     {
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
