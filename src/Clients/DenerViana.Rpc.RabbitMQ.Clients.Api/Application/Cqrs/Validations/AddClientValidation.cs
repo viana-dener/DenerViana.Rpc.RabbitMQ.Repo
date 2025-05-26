@@ -44,6 +44,10 @@ public class AddClientValidation : AbstractValidator<AddClientCommand>
             .Must(BeAValidTaxNumber)
             .WithMessage("Tax number is invalid");
 
+        RuleFor(c => c.CorrelationId)
+            .NotEmpty()
+            .WithMessage("CorrelationId is required");
+
         RuleFor(c => c.CreatedId)
             .NotEmpty()
             .WithMessage("CreatedId is required");

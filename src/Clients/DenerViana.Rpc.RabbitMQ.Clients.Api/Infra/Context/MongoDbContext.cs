@@ -1,4 +1,5 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Mediator;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Settings;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Entities;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Interfaces;
 using Microsoft.Extensions.Options;

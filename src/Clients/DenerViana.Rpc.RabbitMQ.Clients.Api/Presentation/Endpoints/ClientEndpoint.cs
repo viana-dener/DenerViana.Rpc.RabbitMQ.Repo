@@ -1,8 +1,10 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Dtos;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Mediator;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Dtos;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Filters;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Models.Response;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
+using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Commands;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Models.Response;
@@ -24,7 +26,7 @@ public static class ClientEndpoint
     /// <param name="app">The web application instance.</param>
     public static void MapClientEndpoint(this WebApplication app)
     {
-        app.MapGet("Client", async (IMainEndpoints endpoint, IClientAppServices ClientApp) =>
+        app.MapGet("clients", async (IMainEndpoints endpoint, IClientAppServices ClientApp) =>
         {
             var result = await ClientApp.GetAllAsync();
             return endpoint.CustomResponse(result);
@@ -44,9 +46,9 @@ public static class ClientEndpoint
             Location = ResponseCacheLocation.Any
         });
 
-        app.MapPost("Client", async (INotify notify, IMainEndpoints endpoint, IClientAppServices ClientApp, ClientRequest client) =>
+        app.MapPost("clients", async (INotify _notify, IMainEndpoints _endpoint, IMediatorHandler _handler, ClientRequest client) =>
         {
-            var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
+            var headers = _endpoint.HttpContext.Request.HttpContext.Request.Headers;
             var requiredHeaders = new Dictionary<string, bool>
             {
                 { "x-origin", true },
@@ -57,12 +59,12 @@ public static class ClientEndpoint
             };
 
             // Validate headers
-            if (!HeadersValidate(notify, headers, requiredHeaders)) return endpoint.CustomResponse();
+            if (!HeadersValidate(_notify, headers, requiredHeaders)) return _endpoint.CustomResponse();
 
-            var clientInfo = CreateClientInfo(headers);
-            var result = await ClientApp.AddAsync(client, clientInfo);
+            var userInfo = CreateUserInfo(headers);
+            var result = await _handler.SendCommand(new AddClientCommand(client.Id, userInfo.Origin, client.Name, client.Email, client.TaxNumber, userInfo.CorrelationId, userInfo.UserId, userInfo.UserName));
 
-            return endpoint.CustomResponse(result);
+            return _endpoint.CustomResponse(result.IsValid);
         })
         .AddEndpointFilter<ValidationFilter<ClientRequest>>()
         .WithName("PostClient")
@@ -85,7 +87,7 @@ public static class ClientEndpoint
 
     #region Private Methods
 
-    private static UserInfoDto CreateClientInfo(IHeaderDictionary headers)
+    private static UserInfoDto CreateUserInfo(IHeaderDictionary headers)
     {
         return new UserInfoDto()
         {

@@ -21,7 +21,7 @@ public static class UserEndpoint
     /// </summary>
     public static void MapUserEndpoint(this WebApplication app)
     {
-        app.MapGet("User", async (IMainEndpoints endpoint, IUserAppServices userApp) =>
+        app.MapGet("users", async (IMainEndpoints endpoint, IUserAppServices userApp) =>
         {
             var result = await userApp.GetAllAsync();
 
@@ -42,7 +42,7 @@ public static class UserEndpoint
               Location = ResponseCacheLocation.Any
           });
 
-        app.MapPost("User", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, UserRequest User) =>
+        app.MapPost("users", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, UserRequest User) =>
         {
             var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
             var requiredHeaders = new Dictionary<string, bool>

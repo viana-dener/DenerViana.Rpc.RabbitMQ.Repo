@@ -1,6 +1,7 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Dtos;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Models.Response;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
@@ -35,6 +36,21 @@ public class MainEndpoints(ILogger<MainEndpoints> logger, IHttpContextAccessor h
             return Results.Ok(new GenericResponse { Result = value });
 
         return Results.Ok(result);
+    }
+
+    public IResult CustomResponse(ValidationResult validationResult)
+    {
+        if (!validationResult.IsValid)
+        {
+            foreach (var error in validationResult.Errors)
+            {
+                _notify.AddError(error.ErrorMessage);
+            }
+
+            return CustomResponse();
+        }
+
+        return CustomResponse(new GenericResponse { Result = true });
     }
 
     /// <summary>
