@@ -13,6 +13,7 @@ public class AddClientCommand : Command
     public string Name { get; private set; }
     public string Email { get; private set; }
     public string TaxNumber { get; private set; }
+
     public string CorrelationId { get; private set; }
     public string CreatedId { get; private set; }
     public string CreatedBy { get; private set; }

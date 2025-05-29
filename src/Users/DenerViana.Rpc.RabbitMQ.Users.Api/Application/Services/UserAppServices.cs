@@ -70,7 +70,7 @@ public class UserAppServices(ILog log, INotify notify, IMapper mapper, IUserServ
             return false;
         }
 
-        var account = new User(userInfo.Origin, request.Name, request.Email, request.Password, userInfo.UserId, userInfo.UserName);
+        var account = new User(userInfo.Origin, request.Name, request.Email, request.Password, userInfo.UserId, userInfo.UserName, Guid.Parse(userInfo.CorrelationId));
 
         var result = await _services.AddAsync(account);
         if (!result)

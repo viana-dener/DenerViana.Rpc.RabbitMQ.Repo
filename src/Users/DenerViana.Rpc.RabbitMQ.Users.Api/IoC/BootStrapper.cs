@@ -4,6 +4,8 @@ using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Helpers;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Notifications;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.AutoMapper;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Cqrs.Commands;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Cqrs.Events;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Services;
@@ -12,6 +14,8 @@ using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Services;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Infra.Data.Repository;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Presentation.Validations;
 using FluentValidation;
+using FluentValidation.Results;
+using MediatR;
 
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.IoC;
 
@@ -36,6 +40,8 @@ public static class BootStrapper
         // Applications
         services.AddAutoMapper(typeof(MappingProfile));
         services.AddScoped<IUserAppServices, UserAppServices>();
+        services.AddScoped<IRequestHandler<AddUserCommand, ValidationResult>, UserCommandHandler>();
+        services.AddScoped<INotificationHandler<UserAddedEvent>, UserEventHandler>();
 
         // Domain
         services.AddScoped<INotify, Notify>();

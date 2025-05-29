@@ -37,6 +37,9 @@ namespace DenerViana.Rpc.RabbitMQ.Users.Api.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("CreatedBy");
 
+                    b.Property<string>("CreatedId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<bool>("IsExcluded")
                         .HasColumnType("bit");
 

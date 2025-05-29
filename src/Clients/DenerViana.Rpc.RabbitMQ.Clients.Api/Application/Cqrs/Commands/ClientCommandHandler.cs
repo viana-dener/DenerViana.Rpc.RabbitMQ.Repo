@@ -1,7 +1,6 @@
 ﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Mediator;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Messages;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
-using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Notifications;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Application.Cqrs.Events;
 using DenerViana.Rpc.RabbitMQ.Clients.Api.Domain.Entities;
@@ -31,7 +30,7 @@ public class ClientCommandHandler(ILog log, INotify notify, IMediatorHandler med
     {
         if (!await ValidateCommand(command)) return command.ValidationResult;
 
-        Client client = CreateClient(command);
+        var client = CreateClient(command);
 
         // Save to database
         if (!await _repository.AddAsync(client))
@@ -105,7 +104,7 @@ public class ClientCommandHandler(ILog log, INotify notify, IMediatorHandler med
                 _notify.AddError(error.ErrorMessage);
             }
 
-            result = false;
+            return false;
         }
 
         // Business validation

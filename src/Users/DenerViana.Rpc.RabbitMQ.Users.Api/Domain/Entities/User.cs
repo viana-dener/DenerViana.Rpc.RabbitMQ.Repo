@@ -54,7 +54,7 @@ public class User : EntityDb, IAggregateRoot
     /// <param name="password">The password of the user.</param>
     /// <param name="createdId">Identifier of the user who created this user.</param>
     /// <param name="createdBy">Name of the user who created this user.</param>
-    public User(string origin, string name, string email, string password, string createdId, string createdBy)
+    public User(string origin, string name, string email, string password, string createdId, string createdBy, Guid? correlationId)
     {
         Origin = origin;
         Name = name;
@@ -64,6 +64,7 @@ public class User : EntityDb, IAggregateRoot
         CreatedId = createdId;
         CreatedBy = createdBy;
         CreatedAt = DateTime.UtcNow;
+        CorrelationId = correlationId;
     }
 
     #endregion

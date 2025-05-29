@@ -75,9 +75,16 @@ public class UserRepository(SqlServerDbContext context) : IUserRepository
     /// <returns>True if the user exists; otherwise, false.</returns>
     public async Task<bool> ExistsAsync(string email)
     {
+        try
+        {
         return await _context.User.AsNoTracking()
-            .Where(x => x.Email.Address.ToLower().Trim() == email.ToLower().Trim() && !x.IsExcluded)
+            .Where(x => x.Email.Address.ToLower() == email.ToLower() && !x.IsExcluded)
             .FirstOrDefaultAsync() != null;
+        }
+        catch (Exception ex)
+        {
+            throw new DataException(ex.Message, 500);
+        }
     }
 
     /// <summary>

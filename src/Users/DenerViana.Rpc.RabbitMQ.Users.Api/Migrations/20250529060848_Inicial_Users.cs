@@ -21,6 +21,7 @@ namespace DenerViana.Rpc.RabbitMQ.Users.Api.Migrations
                     Email = table.Column<string>(type: "nvarchar(254)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(255)", nullable: false),
                     IsExcluded = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedId = table.Column<string>(type: "varchar(255)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(255)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(255)", nullable: true),

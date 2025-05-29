@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DenerViana.Rpc.RabbitMQ.Users.Api.Migrations
 {
     [DbContext(typeof(SqlServerDbContext))]
-    [Migration("20250517073543_Inicial_Users")]
+    [Migration("20250529060848_Inicial_Users")]
     partial class Inicial_Users
     {
         /// <inheritdoc />
@@ -39,6 +39,9 @@ namespace DenerViana.Rpc.RabbitMQ.Users.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("CreatedBy");
+
+                    b.Property<string>("CreatedId")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<bool>("IsExcluded")
                         .HasColumnType("bit");

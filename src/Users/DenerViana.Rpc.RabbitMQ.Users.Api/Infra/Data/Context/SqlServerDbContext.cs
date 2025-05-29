@@ -1,4 +1,5 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Messages;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,8 @@ public class SqlServerDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Ignore<Event>();
 
         foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
             e => e.GetProperties().Where(p => p.ClrType == typeof(string))))

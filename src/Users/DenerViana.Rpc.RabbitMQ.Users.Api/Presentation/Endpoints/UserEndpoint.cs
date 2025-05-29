@@ -1,8 +1,10 @@
-﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Dtos;
+﻿using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Cqrs.Mediator;
+using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Dtos;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Filters;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Interfaces;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Models.Response;
 using DenerViana.Rpc.RabbitMQ.BuildingBlocks.Tools;
+using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Cqrs.Commands;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Interfaces;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Request;
 using DenerViana.Rpc.RabbitMQ.Users.Api.Application.Models.Response;
@@ -45,7 +47,7 @@ public static class UserEndpoint
         });
 
         // POST /users - Adds a new user after validating headers and request body.
-        app.MapPost("users", async (INotify notify, IMainEndpoints endpoint, IUserAppServices userApp, UserRequest User) =>
+        app.MapPost("users", async (INotify notify, IMainEndpoints endpoint, IMediatorHandler _handler, UserRequest user) =>
         {
             var headers = endpoint.HttpContext.Request.HttpContext.Request.Headers;
             var requiredHeaders = new Dictionary<string, bool>
@@ -61,7 +63,7 @@ public static class UserEndpoint
 
             var userInfo = CreateUserInfo(headers);
 
-            var result = await userApp.AddAsync(User, userInfo);
+            var result = await _handler.SendCommand(new AddUserCommand(userInfo.Origin, user.Name, user.TaxNumber, user.Email, user.Password, userInfo.CorrelationId, userInfo.UserId, userInfo.UserName));
 
             return endpoint.CustomResponse(result);
 
